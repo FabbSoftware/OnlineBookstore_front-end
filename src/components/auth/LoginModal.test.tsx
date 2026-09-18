@@ -1,9 +1,9 @@
-import React from 'react';
+﻿import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { LoginModal } from '../components/auth/LoginModal';
-import { useUIStore } from '../store/useUIStore';
+import { LoginModal } from './LoginModal';
+import { useUIStore } from '../../store/useUIStore';
 
 describe('LoginModal component', () => {
   let queryClient: QueryClient;

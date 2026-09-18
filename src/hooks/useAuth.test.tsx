@@ -1,8 +1,8 @@
-import React from 'react';
+﻿import React from 'react';
 import { renderHook, waitFor } from '@testing-library/react';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { useLoginMutation, useRegisterMutation } from '../hooks/useAuth';
+import { useLoginMutation, useRegisterMutation } from './useAuth';
 import { useAuthStore } from '../store/useAuthStore';
 import * as authApi from '../api/authApi';
 import { AuthResponse } from '../types';

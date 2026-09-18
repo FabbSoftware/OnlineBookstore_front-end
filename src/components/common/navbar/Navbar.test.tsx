@@ -2,9 +2,9 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, beforeEach } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
-import { Navbar } from '../components/common/navbar/Navbar';
-import { useAuthStore } from '../store/useAuthStore';
-import { useUIStore } from '../store/useUIStore';
+import { Navbar } from './Navbar';
+import { useAuthStore } from '../../../store/useAuthStore';
+import { useUIStore } from '../../../store/useUIStore';
 
 describe('Navbar component', () => {
   beforeEach(() => {

@@ -1,8 +1,8 @@
 ﻿import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, beforeEach } from 'vitest';
-import { NavSearchBar } from '../components/common/navbar/NavSearchBar';
-import { useUIStore } from '../store/useUIStore';
+import { NavSearchBar } from './NavSearchBar';
+import { useUIStore } from '../../../store/useUIStore';
 
 describe('NavSearchBar component', () => {
   beforeEach(() => {

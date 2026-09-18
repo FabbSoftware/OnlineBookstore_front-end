@@ -1,5 +1,5 @@
-import { describe, it, expect, beforeEach } from 'vitest';
-import { getAuthToken, setAuthToken, removeAuthToken } from '../utils/cookies';
+﻿import { describe, it, expect, beforeEach } from 'vitest';
+import { getAuthToken, setAuthToken, removeAuthToken } from './cookies';
 import Cookies from 'js-cookie';
 
 describe('cookies utility', () => {

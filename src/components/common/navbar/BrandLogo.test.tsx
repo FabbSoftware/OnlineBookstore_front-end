@@ -2,7 +2,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
-import { BrandLogo } from '../components/common/navbar/BrandLogo';
+import { BrandLogo } from './BrandLogo';
 
 describe('BrandLogo component', () => {
   it('renders brand logo icon and title linking to home', () => {

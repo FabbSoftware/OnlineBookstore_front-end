@@ -1,5 +1,5 @@
-import { describe, it, expect, beforeEach } from 'vitest';
-import { useAuthStore } from '../store/useAuthStore';
+﻿import { describe, it, expect, beforeEach } from 'vitest';
+import { useAuthStore } from './useAuthStore';
 import { getAuthToken } from '../utils/cookies';
 import { User } from '../types';
 

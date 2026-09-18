@@ -2,7 +2,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
-import { CartButton } from '../components/common/navbar/CartButton';
+import { CartButton } from './CartButton';
 
 describe('CartButton component', () => {
   it('renders cart link pointing to /cart', () => {
