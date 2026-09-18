@@ -1,35 +1,35 @@
 ﻿import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
 import { UserPlus, BookOpen, AlertCircle, Loader2 } from 'lucide-react';
 import { useRegisterMutation } from '@/hooks/useAuth';
 import { useToastStore } from '@/store/useToastStore';
+import { FullNameInput, EmailInput, PasswordInput } from '@/components/common/form';
+import { RegisterRequest } from '@/types';
 
 export const RegisterPage: React.FC = () => {
-  const [fullName, setFullName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
+  const [serverError, setServerError] = useState<string | null>(null);
   const navigate = useNavigate();
   const { addToast } = useToastStore();
   const registerMutation = useRegisterMutation();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setErrorMessage(null);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<RegisterRequest>({ mode: 'onTouched' });
 
-    registerMutation.mutate(
-      { fullName, email, password },
-      {
-        onSuccess: (data) => {
-          addToast(`Account created! Welcome, ${data.user.fullName}!`, 'success');
-          navigate('/', { replace: true });
-        },
-        onError: (error) => {
-          setErrorMessage(error.message || 'Registration failed. Please try again.');
-        },
-      }
-    );
+  const onSubmit = (data: RegisterRequest) => {
+    setServerError(null);
+    registerMutation.mutate(data, {
+      onSuccess: (res) => {
+        addToast(`Account created! Welcome, ${res.user.fullName}!`, 'success');
+        navigate('/', { replace: true });
+      },
+      onError: (err) => {
+        setServerError(err.message || 'Registration failed. Please try again.');
+      },
+    });
   };
 
   return (
@@ -43,59 +43,17 @@ export const RegisterPage: React.FC = () => {
           <p className="text-sm text-gray-500 mt-1">Join BookStore to explore and purchase books</p>
         </div>
 
-        {errorMessage && (
+        {serverError && (
           <div className="mb-6 p-4 rounded-xl bg-red-50 border border-red-200 flex items-start gap-3 text-red-700 text-sm">
             <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5 text-red-500" />
-            <span>{errorMessage}</span>
+            <span>{serverError}</span>
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label htmlFor="reg-fullname" className="block text-sm font-medium text-gray-700 mb-1">
-              Full Name
-            </label>
-            <input
-              id="reg-fullname"
-              type="text"
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-              required
-              className="w-full px-3.5 py-2.5 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-              placeholder="Jane Doe"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="reg-email" className="block text-sm font-medium text-gray-700 mb-1">
-              Email Address
-            </label>
-            <input
-              id="reg-email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full px-3.5 py-2.5 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-              placeholder="you@example.com"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="reg-password" className="block text-sm font-medium text-gray-700 mb-1">
-              Password
-            </label>
-            <input
-              id="reg-password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              minLength={6}
-              className="w-full px-3.5 py-2.5 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-              placeholder="••••••••"
-            />
-          </div>
+        <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-4">
+          <FullNameInput register={register} error={errors.fullName} />
+          <EmailInput register={register} error={errors.email} />
+          <PasswordInput register={register} error={errors.password} requireComplexity={true} />
 
           <button
             type="submit"

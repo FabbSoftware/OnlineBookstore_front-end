@@ -1,11 +1,10 @@
-﻿import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { LoginPage } from './LoginPage';
-import * as authApi from '../api/authApi';
-import { useAuthStore } from '../store/useAuthStore';
+import * as authApi from '@/api/authApi';
+import { useAuthStore } from '@/store/useAuthStore';
 
 const mockedNavigate = vi.fn();
 vi.mock('react-router-dom', async () => {
@@ -38,9 +37,28 @@ describe('LoginPage', () => {
     render(<LoginPage />, { wrapper });
     expect(screen.getByRole('heading', { name: /Sign In to Your Account/i })).toBeInTheDocument();
     expect(screen.getByLabelText(/Email Address/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Password/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/^Password$/i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /^Sign In$/i })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /Don't have an account\? Sign up/i })).toHaveAttribute('href', '/register');
+  });
+
+  it('validates required fields on submission', async () => {
+    render(<LoginPage />, { wrapper });
+
+    fireEvent.click(screen.getByRole('button', { name: /^Sign In$/i }));
+
+    expect(await screen.findByText(/Email is required/i)).toBeInTheDocument();
+    expect(screen.getByText(/Password is required/i)).toBeInTheDocument();
+  });
+
+  it('validates email format', async () => {
+    render(<LoginPage />, { wrapper });
+
+    fireEvent.change(screen.getByLabelText(/Email Address/i), { target: { value: 'not-a-valid-email' } });
+    fireEvent.change(screen.getByLabelText(/^Password$/i), { target: { value: 'secret123' } });
+    fireEvent.click(screen.getByRole('button', { name: /^Sign In$/i }));
+
+    expect(await screen.findByText(/Please enter a valid email address/i)).toBeInTheDocument();
   });
 
   it('submits form and navigates upon successful login', async () => {
@@ -58,7 +76,7 @@ describe('LoginPage', () => {
     render(<LoginPage />, { wrapper });
 
     fireEvent.change(screen.getByLabelText(/Email Address/i), { target: { value: 'test@example.com' } });
-    fireEvent.change(screen.getByLabelText(/Password/i), { target: { value: 'secret123' } });
+    fireEvent.change(screen.getByLabelText(/^Password$/i), { target: { value: 'secret123' } });
     fireEvent.click(screen.getByRole('button', { name: /^Sign In$/i }));
 
     await waitFor(() => {
@@ -73,7 +91,7 @@ describe('LoginPage', () => {
     render(<LoginPage />, { wrapper });
 
     fireEvent.change(screen.getByLabelText(/Email Address/i), { target: { value: 'test@example.com' } });
-    fireEvent.change(screen.getByLabelText(/Password/i), { target: { value: 'wrongpass' } });
+    fireEvent.change(screen.getByLabelText(/^Password$/i), { target: { value: 'wrongpass' } });
     fireEvent.click(screen.getByRole('button', { name: /^Sign In$/i }));
 
     await waitFor(() => {

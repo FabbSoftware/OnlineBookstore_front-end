@@ -1,11 +1,10 @@
-﻿import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { RegisterPage } from './RegisterPage';
-import * as authApi from '../api/authApi';
-import { useAuthStore } from '../store/useAuthStore';
+import * as authApi from '@/api/authApi';
+import { useAuthStore } from '@/store/useAuthStore';
 
 const mockedNavigate = vi.fn();
 vi.mock('react-router-dom', async () => {
@@ -39,9 +38,41 @@ describe('RegisterPage', () => {
     expect(screen.getByRole('heading', { name: /Create an Account/i })).toBeInTheDocument();
     expect(screen.getByLabelText(/Full Name/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/Email Address/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Password/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/^Password$/i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /^Sign Up$/i })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /Already have an account\? Sign in/i })).toHaveAttribute('href', '/login');
+  });
+
+  it('validates required fields on submission', async () => {
+    render(<RegisterPage />, { wrapper });
+
+    fireEvent.click(screen.getByRole('button', { name: /^Sign Up$/i }));
+
+    expect(await screen.findByText(/Full name is required/i)).toBeInTheDocument();
+    expect(screen.getByText(/Email is required/i)).toBeInTheDocument();
+    expect(screen.getByText(/Password is required/i)).toBeInTheDocument();
+  });
+
+  it('validates email format', async () => {
+    render(<RegisterPage />, { wrapper });
+
+    fireEvent.change(screen.getByLabelText(/Full Name/i), { target: { value: 'Jane Doe' } });
+    fireEvent.change(screen.getByLabelText(/Email Address/i), { target: { value: 'not-a-valid-email' } });
+    fireEvent.change(screen.getByLabelText(/^Password$/i), { target: { value: 'Secret1!' } });
+    fireEvent.click(screen.getByRole('button', { name: /^Sign Up$/i }));
+
+    expect(await screen.findByText(/Please enter a valid email address/i)).toBeInTheDocument();
+  });
+
+  it('validates password complexity (at least 8 chars, upper, lower, digit, special)', async () => {
+    render(<RegisterPage />, { wrapper });
+
+    fireEvent.change(screen.getByLabelText(/Full Name/i), { target: { value: 'New User' } });
+    fireEvent.change(screen.getByLabelText(/Email Address/i), { target: { value: 'user@example.com' } });
+    fireEvent.change(screen.getByLabelText(/^Password$/i), { target: { value: 'short1!' } });
+    fireEvent.click(screen.getByRole('button', { name: /^Sign Up$/i }));
+
+    expect(await screen.findByText(/Password must be at least 8 characters/i)).toBeInTheDocument();
   });
 
   it('submits form and navigates upon successful registration', async () => {
@@ -60,7 +91,7 @@ describe('RegisterPage', () => {
 
     fireEvent.change(screen.getByLabelText(/Full Name/i), { target: { value: 'New User' } });
     fireEvent.change(screen.getByLabelText(/Email Address/i), { target: { value: 'newuser@example.com' } });
-    fireEvent.change(screen.getByLabelText(/Password/i), { target: { value: 'secret123' } });
+    fireEvent.change(screen.getByLabelText(/^Password$/i), { target: { value: 'Secret123!' } });
     fireEvent.click(screen.getByRole('button', { name: /^Sign Up$/i }));
 
     await waitFor(() => {
@@ -76,7 +107,7 @@ describe('RegisterPage', () => {
 
     fireEvent.change(screen.getByLabelText(/Full Name/i), { target: { value: 'New User' } });
     fireEvent.change(screen.getByLabelText(/Email Address/i), { target: { value: 'newuser@example.com' } });
-    fireEvent.change(screen.getByLabelText(/Password/i), { target: { value: 'secret123' } });
+    fireEvent.change(screen.getByLabelText(/^Password$/i), { target: { value: 'Secret123!' } });
     fireEvent.click(screen.getByRole('button', { name: /^Sign Up$/i }));
 
     await waitFor(() => {

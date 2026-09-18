@@ -1,14 +1,14 @@
 ﻿import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
 import { LogIn, BookOpen, AlertCircle, Loader2 } from 'lucide-react';
 import { useLoginMutation } from '@/hooks/useAuth';
 import { useToastStore } from '@/store/useToastStore';
+import { EmailInput, PasswordInput } from '@/components/common/form';
+import { LoginRequest } from '@/types';
 
 export const LoginPage: React.FC = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
+  const [serverError, setServerError] = useState<string | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
   const { addToast } = useToastStore();
@@ -16,22 +16,23 @@ export const LoginPage: React.FC = () => {
 
   const from = (location.state as { from?: { pathname: string } })?.from?.pathname || '/';
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setErrorMessage(null);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginRequest>({ mode: 'onTouched' });
 
-    loginMutation.mutate(
-      { email, password },
-      {
-        onSuccess: (data) => {
-          addToast(`Welcome back, ${data.user.fullName}!`, 'success');
-          navigate(from, { replace: true });
-        },
-        onError: (error) => {
-          setErrorMessage(error.message || 'Invalid email or password');
-        },
-      }
-    );
+  const onSubmit = (data: LoginRequest) => {
+    setServerError(null);
+    loginMutation.mutate(data, {
+      onSuccess: (res) => {
+        addToast(`Welcome back, ${res.user.fullName}!`, 'success');
+        navigate(from, { replace: true });
+      },
+      onError: (err) => {
+        setServerError(err.message || 'Invalid email or password');
+      },
+    });
   };
 
   return (
@@ -45,43 +46,16 @@ export const LoginPage: React.FC = () => {
           <p className="text-sm text-gray-500 mt-1">Welcome back to BookStore</p>
         </div>
 
-        {errorMessage && (
+        {serverError && (
           <div className="mb-6 p-4 rounded-xl bg-red-50 border border-red-200 flex items-start gap-3 text-red-700 text-sm">
             <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5 text-red-500" />
-            <span>{errorMessage}</span>
+            <span>{serverError}</span>
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label htmlFor="login-email" className="block text-sm font-medium text-gray-700 mb-1">
-              Email Address
-            </label>
-            <input
-              id="login-email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full px-3.5 py-2.5 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-              placeholder="you@example.com"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="login-password" className="block text-sm font-medium text-gray-700 mb-1">
-              Password
-            </label>
-            <input
-              id="login-password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="w-full px-3.5 py-2.5 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-              placeholder="••••••••"
-            />
-          </div>
+        <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-4">
+          <EmailInput register={register} error={errors.email} />
+          <PasswordInput register={register} error={errors.password} />
 
           <button
             type="submit"
