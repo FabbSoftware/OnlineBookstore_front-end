@@ -1,7 +1,8 @@
-import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+﻿import React from 'react';
+import { render, screen } from '@testing-library/react';
 import { describe, it, expect, beforeEach } from 'vitest';
-import { Navbar } from '../components/common/Navbar';
+import { MemoryRouter } from 'react-router-dom';
+import { Navbar } from '../components/common/navbar/Navbar';
 import { useAuthStore } from '../store/useAuthStore';
 import { useUIStore } from '../store/useUIStore';
 
@@ -9,30 +10,26 @@ describe('Navbar component', () => {
   beforeEach(() => {
     useAuthStore.getState().logout();
     useUIStore.setState({
-      activeModal: null,
       searchQuery: '',
+      toasts: [],
     });
   });
 
-  it('renders brand name and search input', () => {
-    render(<Navbar cartItemCount={0} onOpenCart={() => {}} />);
-    expect(screen.getByText(/BookStore/i)).toBeInTheDocument();
-    expect(screen.getByPlaceholderText(/Search books by title or author/i)).toBeInTheDocument();
+  it('renders brand logo, search bar, cart button, and unauthenticated user nav', () => {
+    render(
+      <MemoryRouter>
+        <Navbar cartItemCount={0} />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByLabelText(/BookStore/i)).toBeInTheDocument();
+    expect(screen.getAllByPlaceholderText(/Search books by title or author/i).length).toBeGreaterThanOrEqual(1);
+    expect(screen.getByRole('link', { name: /shopping cart/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Sign In/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Sign Up/i })).toBeInTheDocument();
   });
 
-  it('shows Sign In and Sign Up buttons when unauthenticated', () => {
-    render(<Navbar cartItemCount={0} onOpenCart={() => {}} />);
-    expect(screen.getByRole('button', { name: /Sign In/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Sign Up/i })).toBeInTheDocument();
-  });
-
-  it('clicking Sign In opens login modal', () => {
-    render(<Navbar cartItemCount={0} onOpenCart={() => {}} />);
-    fireEvent.click(screen.getByRole('button', { name: /Sign In/i }));
-    expect(useUIStore.getState().activeModal).toBe('login');
-  });
-
-  it('shows user name, My Orders, and Logout when authenticated', () => {
+  it('shows user controls and cart count when authenticated and cart has items', () => {
     useAuthStore.getState().setAuth('mock-token', {
       id: 'uuid-1',
       email: 'jane@example.com',
@@ -40,14 +37,15 @@ describe('Navbar component', () => {
       role: 'ROLE_USER',
     });
 
-    render(<Navbar cartItemCount={2} onOpenCart={() => {}} />);
-    expect(screen.getByText(/Jane Doe/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /My Orders/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Logout/i })).toBeInTheDocument();
-  });
+    render(
+      <MemoryRouter>
+        <Navbar cartItemCount={3} />
+      </MemoryRouter>
+    );
 
-  it('shows cart item count badge when greater than 0', () => {
-    render(<Navbar cartItemCount={3} onOpenCart={() => {}} />);
+    expect(screen.getByText(/Jane Doe/i)).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /My Orders/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Logout/i })).toBeInTheDocument();
     expect(screen.getByText('3')).toBeInTheDocument();
   });
 });
