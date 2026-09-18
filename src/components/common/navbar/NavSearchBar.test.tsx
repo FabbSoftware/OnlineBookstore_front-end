@@ -1,12 +1,11 @@
-﻿import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+﻿import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, beforeEach } from 'vitest';
 import { NavSearchBar } from './NavSearchBar';
-import { useUIStore } from '../../../store/useUIStore';
+import { useSearchStore } from '@/store/useSearchStore';
 
 describe('NavSearchBar component', () => {
   beforeEach(() => {
-    useUIStore.setState({ searchQuery: '' });
+    useSearchStore.getState().clearSearchQuery();
   });
 
   it('renders search input with placeholder', () => {
@@ -20,11 +19,11 @@ describe('NavSearchBar component', () => {
     render(<NavSearchBar />);
     const input = screen.getByPlaceholderText(/Search books by title or author/i);
     fireEvent.change(input, { target: { value: 'clean code' } });
-    expect(useUIStore.getState().searchQuery).toBe('clean code');
+    expect(useSearchStore.getState().searchQuery).toBe('clean code');
   });
 
   it('displays current search query from store', () => {
-    useUIStore.setState({ searchQuery: 'refactoring' });
+    useSearchStore.getState().setSearchQuery('refactoring');
     render(<NavSearchBar />);
     const input = screen.getByPlaceholderText(/Search books by title or author/i) as HTMLInputElement;
     expect(input.value).toBe('refactoring');

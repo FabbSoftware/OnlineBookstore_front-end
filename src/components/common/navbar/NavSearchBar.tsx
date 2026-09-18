@@ -1,13 +1,13 @@
 ﻿import React from 'react';
 import { Search } from 'lucide-react';
-import { useUIStore } from '../../../store/useUIStore';
+import { useSearchStore } from '@/store/useSearchStore';
 
 interface NavSearchBarProps {
   className?: string;
 }
 
 export const NavSearchBar: React.FC<NavSearchBarProps> = ({ className = '' }) => {
-  const { searchQuery, setSearchQuery } = useUIStore();
+  const { searchQuery, setSearchQuery } = useSearchStore();
 
   return (
     <div className={`relative ${className}`}>

@@ -1,15 +1,14 @@
-﻿import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+﻿import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, beforeEach } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import { UserNav } from './UserNav';
-import { useAuthStore } from '../../../store/useAuthStore';
-import { useUIStore } from '../../../store/useUIStore';
+import { useAuthStore } from '@/store/useAuthStore';
+import { useToastStore } from '@/store/useToastStore';
 
 describe('UserNav component', () => {
   beforeEach(() => {
     useAuthStore.getState().logout();
-    useUIStore.setState({ toasts: [] });
+    useToastStore.getState().clearToasts();
   });
 
   it('renders Sign In and Sign Up links when unauthenticated', () => {
@@ -69,7 +68,7 @@ describe('UserNav component', () => {
 
     expect(useAuthStore.getState().isAuthenticated).toBe(false);
     expect(useAuthStore.getState().token).toBeNull();
-    expect(useUIStore.getState().toasts).toHaveLength(1);
-    expect(useUIStore.getState().toasts[0].message).toMatch(/logged out/i);
+    expect(useToastStore.getState().toasts).toHaveLength(1);
+    expect(useToastStore.getState().toasts[0].message).toMatch(/logged out/i);
   });
 });

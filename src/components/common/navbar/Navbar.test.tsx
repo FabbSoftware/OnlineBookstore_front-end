@@ -1,18 +1,16 @@
-﻿import React from 'react';
-import { render, screen } from '@testing-library/react';
+﻿import { render, screen } from '@testing-library/react';
 import { describe, it, expect, beforeEach } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import { Navbar } from './Navbar';
-import { useAuthStore } from '../../../store/useAuthStore';
-import { useUIStore } from '../../../store/useUIStore';
+import { useAuthStore } from '@/store/useAuthStore';
+import { useSearchStore } from '@/store/useSearchStore';
+import { useToastStore } from '@/store/useToastStore';
 
 describe('Navbar component', () => {
   beforeEach(() => {
     useAuthStore.getState().logout();
-    useUIStore.setState({
-      searchQuery: '',
-      toasts: [],
-    });
+    useSearchStore.getState().clearSearchQuery();
+    useToastStore.getState().clearToasts();
   });
 
   it('renders brand logo, search bar, cart button, and unauthenticated user nav', () => {
