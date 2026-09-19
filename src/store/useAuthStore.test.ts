@@ -1,6 +1,6 @@
-﻿import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { useAuthStore } from './useAuthStore';
-import { getAuthToken } from '../utils/cookies';
+import { getAuthToken } from '../utils';
 import { User } from '../types';
 
 describe('useAuthStore', () => {

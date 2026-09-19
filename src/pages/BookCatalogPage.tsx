@@ -1,10 +1,9 @@
 import React, { useCallback } from 'react';
 import { Sparkles, X } from 'lucide-react';
 import { useBooksQuery } from '@/api/book';
-import { useSearchStore } from '@/store/useSearchStore';
-import { useToastStore } from '@/store/useToastStore';
-import { BookGrid } from '@/components/books/BookGrid';
-import { BookGridSkeleton } from '@/components/common/skeletons/BookGridSkeleton';
+import { useSearchStore, useToastStore } from '@/store';
+import { BookGrid } from '@/components/books';
+import { BookGridSkeleton } from '@/components/common/skeletons';
 import { Book } from '@/types';
 
 export const BookCatalogPage: React.FC = () => {

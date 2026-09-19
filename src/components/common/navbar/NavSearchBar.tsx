@@ -1,6 +1,6 @@
-﻿import React from 'react';
+import React from 'react';
 import { Search } from 'lucide-react';
-import { useSearchStore } from '@/store/useSearchStore';
+import { useSearchStore } from '@/store';
 
 interface NavSearchBarProps {
   className?: string;

@@ -1,10 +1,8 @@
-﻿import { render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { describe, it, expect, beforeEach } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import { Navbar } from './Navbar';
-import { useAuthStore } from '@/store/useAuthStore';
-import { useSearchStore } from '@/store/useSearchStore';
-import { useToastStore } from '@/store/useToastStore';
+import { useAuthStore, useSearchStore, useToastStore } from '@/store';
 
 describe('Navbar component', () => {
   beforeEach(() => {

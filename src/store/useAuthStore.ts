@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { User } from '../types';
-import { getAuthToken, setAuthToken, removeAuthToken } from '../utils/cookies';
+import { getAuthToken, setAuthToken, removeAuthToken } from '../utils';
 
 interface AuthState {
   token: string | null;

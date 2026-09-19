@@ -4,7 +4,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BookCatalogPage } from './BookCatalogPage';
 import * as bookHooks from '@/api/book';
-import { useSearchStore } from '@/store/useSearchStore';
+import { useSearchStore } from '@/store';
 import { Book } from '@/types';
 
 vi.mock('@/api/book', async (importOriginal) => {

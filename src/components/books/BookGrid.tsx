@@ -1,7 +1,7 @@
 import React from 'react';
 import { BookOpen } from 'lucide-react';
 import { MemoizedBookCard } from './MemoizedBookCard';
-import { EmptyState } from '@/components/common/EmptyState';
+import { EmptyState } from '@/components/common';
 import { Book } from '@/types';
 
 interface BookGridProps {

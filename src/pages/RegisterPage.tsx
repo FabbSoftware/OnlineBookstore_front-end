@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { UserPlus, BookOpen, AlertCircle, Loader2 } from 'lucide-react';
 import { useRegisterMutation } from '@/api/auth';
-import { useToastStore } from '@/store/useToastStore';
+import { useToastStore } from '@/store';
 import { FullNameInput, EmailInput, PasswordInput } from '@/components/common/form';
 import { RegisterRequest } from '@/types';
 

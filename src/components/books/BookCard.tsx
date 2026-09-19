@@ -6,7 +6,7 @@ import { BookCover } from './BookCover';
 import { StockBadge } from './StockBadge';
 import { BookInfo } from './BookInfo';
 
-import { formatCurrency } from '@/utils/formatters';
+import { formatCurrency } from '@/utils';
 
 export interface BookCardProps {
   book: Book;

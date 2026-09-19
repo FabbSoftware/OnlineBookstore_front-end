@@ -1,9 +1,8 @@
-﻿import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, beforeEach } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import { UserNav } from './UserNav';
-import { useAuthStore } from '@/store/useAuthStore';
-import { useToastStore } from '@/store/useToastStore';
+import { useAuthStore, useToastStore } from '@/store';
 
 describe('UserNav component', () => {
   beforeEach(() => {

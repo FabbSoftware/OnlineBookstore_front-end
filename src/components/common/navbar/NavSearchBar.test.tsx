@@ -1,7 +1,7 @@
-﻿import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, beforeEach } from 'vitest';
 import { NavSearchBar } from './NavSearchBar';
-import { useSearchStore } from '@/store/useSearchStore';
+import { useSearchStore } from '@/store';
 
 describe('NavSearchBar component', () => {
   beforeEach(() => {

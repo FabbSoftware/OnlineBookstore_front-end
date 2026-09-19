@@ -7,10 +7,8 @@ import {
   useRemoveCartItemMutation,
   useClearCartMutation,
 } from '@/api/cart';
-import { CartSkeleton } from '@/components/common/skeletons/CartSkeleton';
-import { EmptyState } from '@/components/common/EmptyState';
-import { MemoizedCartItemRow } from '@/components/cart/MemoizedCartItemRow';
-import { OrderSummary } from '@/components/cart/OrderSummary';
+import { CartSkeleton, EmptyState } from '@/components/common';
+import { MemoizedCartItemRow, OrderSummary } from '@/components/cart';
 
 export const CartPage: React.FC = () => {
   const { data: cart, isLoading, isError } = useCartQuery();

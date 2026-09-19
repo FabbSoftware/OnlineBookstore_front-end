@@ -1,8 +1,8 @@
-﻿import React, { Suspense } from 'react';
+import React, { Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
-import { Navbar } from './navbar/Navbar';
+import { Navbar } from './navbar';
 import { ToastContainer } from './ToastContainer';
-import { BookGridSkeleton } from './skeletons/BookGridSkeleton';
+import { BookGridSkeleton } from './skeletons';
 
 export const RootLayout: React.FC = () => {
   return (

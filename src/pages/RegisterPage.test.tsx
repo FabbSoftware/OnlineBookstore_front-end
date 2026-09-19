@@ -4,7 +4,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { RegisterPage } from './RegisterPage';
 import * as authApi from '@/api/auth/authApi';
-import { useAuthStore } from '@/store/useAuthStore';
+import { useAuthStore } from '@/store';
 
 const mockedNavigate = vi.fn();
 vi.mock('react-router-dom', async () => {

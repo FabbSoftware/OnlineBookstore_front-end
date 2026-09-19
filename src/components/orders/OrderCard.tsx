@@ -3,7 +3,7 @@ import { MapPin, Phone, Calendar } from 'lucide-react';
 import { Order } from '@/types';
 import { OrderStatusBadge } from './OrderStatusBadge';
 import { OrderItemRow } from './OrderItemRow';
-import { formatCurrency, formatDate } from '@/utils/formatters';
+import { formatCurrency, formatDate } from '@/utils';
 
 export interface OrderCardProps {
   order: Order;

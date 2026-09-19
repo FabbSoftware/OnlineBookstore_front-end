@@ -1,4 +1,4 @@
-import { getAuthToken } from '../utils/cookies';
+import { getAuthToken } from '../utils';
 import { ApiErrorResponse } from '../types';
 
 export class ApiError extends Error {

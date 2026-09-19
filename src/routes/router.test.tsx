@@ -3,7 +3,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { RouterProvider, createMemoryRouter } from 'react-router-dom';
 import { getRoutes } from './router';
-import { useAuthStore } from '@/store/useAuthStore';
+import { useAuthStore } from '@/store';
 import * as bookApi from '@/api/book/bookApi';
 import * as cartApi from '@/api/cart/cartApi';
 

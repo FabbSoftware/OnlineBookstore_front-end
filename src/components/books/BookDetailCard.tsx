@@ -4,8 +4,8 @@ import { Book } from '@/types';
 import { BookCover } from './BookCover';
 import { StockBadge } from './StockBadge';
 import { BookInfo } from './BookInfo';
-import { QuantitySelector } from '@/components/common/QuantitySelector';
-import { formatCurrency } from '@/utils/formatters';
+import { QuantitySelector } from '@/components/common';
+import { formatCurrency } from '@/utils';
 
 export interface BookDetailCardProps {
   book: Book;

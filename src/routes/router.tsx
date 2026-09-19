@@ -1,20 +1,17 @@
 import { RouteObject, createBrowserRouter } from 'react-router-dom';
 import { QueryClient } from '@tanstack/react-query';
-import { RootLayout } from '@/components/common/RootLayout';
-import { RouteErrorBoundary } from '@/components/common/RouteErrorBoundary';
-import { ProtectedRoute } from '@/components/common/ProtectedRoute';
-import { BookCatalogPage } from '@/pages/BookCatalogPage';
-import { BookDetailPage } from '@/pages/BookDetailPage';
-import { CartPage } from '@/pages/CartPage';
-import { CheckoutPage } from '@/pages/CheckoutPage';
-import { OrderHistoryPage } from '@/pages/OrderHistoryPage';
-import { LoginPage } from '@/pages/LoginPage';
-import { RegisterPage } from '@/pages/RegisterPage';
-import { NotFoundPage } from '@/pages/errors/NotFoundPage';
-import { catalogLoader, bookDetailLoader } from '@/loaders/bookLoaders';
-import { cartLoader } from '@/loaders/cartLoader';
-import { ordersLoader } from '@/loaders/orderLoaders';
-import { BookGridSkeleton } from '@/components/common/skeletons/BookGridSkeleton';
+import { RootLayout, RouteErrorBoundary, ProtectedRoute, BookGridSkeleton } from '@/components/common';
+import {
+  BookCatalogPage,
+  BookDetailPage,
+  CartPage,
+  CheckoutPage,
+  OrderHistoryPage,
+  LoginPage,
+  RegisterPage,
+  NotFoundPage,
+} from '@/pages';
+import { catalogLoader, bookDetailLoader, cartLoader, ordersLoader } from '@/loaders';
 
 export const getRoutes = (queryClient: QueryClient): RouteObject[] => [
   {

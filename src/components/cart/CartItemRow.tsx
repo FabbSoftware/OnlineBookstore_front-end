@@ -1,9 +1,9 @@
 import React from 'react';
 import { Trash2 } from 'lucide-react';
 import { CartItem } from '@/types';
-import { BookCover } from '@/components/books/BookCover';
-import { QuantitySelector } from '@/components/common/QuantitySelector';
-import { formatCurrency } from '@/utils/formatters';
+import { BookCover } from '@/components/books';
+import { QuantitySelector } from '@/components/common';
+import { formatCurrency } from '@/utils';
 
 export interface CartItemRowProps {
   item: CartItem;

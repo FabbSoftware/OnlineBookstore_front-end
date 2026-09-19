@@ -1,9 +1,11 @@
-﻿import React from 'react';
+import React from 'react';
 import { useRouteError, isRouteErrorResponse } from 'react-router-dom';
-import { NotFoundPage } from '../../pages/errors/NotFoundPage';
-import { UnauthorizedPage } from '../../pages/errors/UnauthorizedPage';
-import { ServerErrorPage } from '../../pages/errors/ServerErrorPage';
-import { GeneralErrorPage } from '../../pages/errors/GeneralErrorPage';
+import {
+  NotFoundPage,
+  UnauthorizedPage,
+  ServerErrorPage,
+  GeneralErrorPage,
+} from '@/pages/errors';
 
 export const RouteErrorBoundary: React.FC = () => {
   const error = useRouteError();

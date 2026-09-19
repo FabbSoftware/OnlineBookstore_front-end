@@ -2,8 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Package, ArrowLeft } from 'lucide-react';
 import { useOrdersQuery } from '@/api/order';
-import { EmptyState } from '@/components/common/EmptyState';
-import { OrderCard } from '@/components/orders/OrderCard';
+import { EmptyState } from '@/components/common';
+import { OrderCard } from '@/components/orders';
 
 export const OrderHistoryPage: React.FC = () => {
   const { data: orders, isLoading, isError } = useOrdersQuery();

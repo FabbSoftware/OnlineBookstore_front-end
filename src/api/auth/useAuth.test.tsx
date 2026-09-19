@@ -3,7 +3,7 @@ import { renderHook, waitFor } from '@testing-library/react';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useLoginMutation, useRegisterMutation, AUTH_QUERY_KEYS } from './useAuth';
-import { useAuthStore } from '@/store/useAuthStore';
+import { useAuthStore } from '@/store';
 import * as authApi from './authApi';
 import { AuthResponse } from '@/types';
 

@@ -1,8 +1,7 @@
-﻿import React from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { User as UserIcon, LogOut, Package } from 'lucide-react';
-import { useAuthStore } from '@/store/useAuthStore';
-import { useToastStore } from '@/store/useToastStore';
+import { useAuthStore, useToastStore } from '@/store';
 
 export const UserNav: React.FC = () => {
   const { user, isAuthenticated, logout } = useAuthStore();

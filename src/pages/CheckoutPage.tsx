@@ -4,9 +4,9 @@ import { useForm } from 'react-hook-form';
 import { CreditCard, ArrowLeft, AlertCircle, Loader2 } from 'lucide-react';
 import { useCartQuery } from '@/api/cart';
 import { useCheckoutMutation } from '@/api/order';
-import { useToastStore } from '@/store/useToastStore';
+import { useToastStore } from '@/store';
 import { AddressInput, PhoneInput } from '@/components/common/form';
-import { OrderSummary } from '@/components/cart/OrderSummary';
+import { OrderSummary } from '@/components/cart';
 import { CheckoutRequest } from '@/types';
 
 export const CheckoutPage: React.FC = () => {

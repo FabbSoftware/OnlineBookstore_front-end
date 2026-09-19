@@ -1,7 +1,7 @@
 import React from 'react';
 import { OrderItem } from '@/types';
-import { BookCover } from '@/components/books/BookCover';
-import { formatCurrency } from '@/utils/formatters';
+import { BookCover } from '@/components/books';
+import { formatCurrency } from '@/utils';
 
 export interface OrderItemRowProps {
   item: OrderItem;
