@@ -1,8 +1,8 @@
-﻿import React from 'react';
+import React from 'react';
 
 export const BookDetailSkeleton: React.FC = () => {
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8 animate-pulse">
+    <div data-testid="book-detail-skeleton" className="max-w-5xl mx-auto px-4 py-8 animate-pulse">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10 bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-gray-200">
         <div className="h-96 bg-gray-200 rounded-xl w-full" />
         <div className="flex flex-col gap-4">

@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 
 interface BookGridSkeletonProps {
   count?: number;
@@ -6,7 +6,7 @@ interface BookGridSkeletonProps {
 
 export const BookGridSkeleton: React.FC<BookGridSkeletonProps> = ({ count = 8 }) => {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4">
+    <div data-testid="book-grid-skeleton" className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4">
       {Array.from({ length: count }).map((_, index) => (
         <div
           key={index}
