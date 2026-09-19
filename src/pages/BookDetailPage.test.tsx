@@ -4,7 +4,16 @@ import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BookDetailPage } from './BookDetailPage';
 import * as bookHooks from '@/api/book';
+import { useAuthStore, useToastStore } from '@/store';
 import { Book } from '@/types';
+
+const mockDetailMutate = vi.fn();
+vi.mock('@/api/cart', () => ({
+  useAddToCartMutation: () => ({
+    mutate: mockDetailMutate,
+    isPending: false,
+  }),
+}));
 
 vi.mock('@/api/book', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@/api/book')>();
@@ -21,6 +30,8 @@ describe('BookDetailPage', () => {
     queryClient = new QueryClient({
       defaultOptions: { queries: { retry: false } },
     });
+    useAuthStore.getState().logout();
+    useToastStore.getState().clearToasts();
     vi.clearAllMocks();
   });
 
@@ -140,5 +151,52 @@ describe('BookDetailPage', () => {
 
     expect(screen.getByRole('heading', { name: /Book Not Found/i })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /Return to Catalog/i })).toHaveAttribute('href', '/');
+  });
+
+  it('calls addToCartMutation with selected quantity when Add to Cart is clicked by authenticated user', () => {
+    useAuthStore.getState().setAuth('token-123', {
+      id: 'u-1',
+      email: 'user@example.com',
+      fullName: 'John',
+      role: 'ROLE_USER',
+    });
+
+    vi.mocked(bookHooks.useBookDetailQuery).mockReturnValue({
+      data: mockBook,
+      isLoading: false,
+      isError: false,
+    } as any);
+
+    renderComponent();
+
+    // Increase quantity to 2
+    const incrementBtn = screen.getByRole('button', { name: /Increase quantity/i });
+    fireEvent.click(incrementBtn);
+
+    const addBtn = screen.getByRole('button', { name: /Add to Cart/i });
+    fireEvent.click(addBtn);
+
+    expect(mockDetailMutate).toHaveBeenCalledWith(
+      { bookId: 'book-99', quantity: 2 },
+      expect.any(Object)
+    );
+  });
+
+  it('redirects to /login and shows toast when Add to Cart is clicked by unauthenticated user', () => {
+    useAuthStore.getState().logout();
+
+    vi.mocked(bookHooks.useBookDetailQuery).mockReturnValue({
+      data: mockBook,
+      isLoading: false,
+      isError: false,
+    } as any);
+
+    renderComponent();
+
+    const addBtn = screen.getByRole('button', { name: /Add to Cart/i });
+    fireEvent.click(addBtn);
+
+    expect(mockDetailMutate).not.toHaveBeenCalled();
+    expect(useToastStore.getState().toasts[0].message).toBe('Please sign in to add items to your cart.');
   });
 });

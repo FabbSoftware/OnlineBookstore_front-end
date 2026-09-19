@@ -16,6 +16,24 @@ export const CartPage: React.FC = () => {
   const removeItemMutation = useRemoveCartItemMutation();
   const clearCartMutation = useClearCartMutation();
 
+  const handleUpdateQuantity = useCallback(
+    (itemId: string, quantity: number) => {
+      updateItemMutation.mutate({ itemId, data: { quantity } });
+    },
+    [updateItemMutation]
+  );
+
+  const handleRemoveItem = useCallback(
+    (itemId: string) => {
+      removeItemMutation.mutate(itemId);
+    },
+    [removeItemMutation]
+  );
+
+  const handleClearCart = useCallback(() => {
+    clearCartMutation.mutate();
+  }, [clearCartMutation]);
+
   if (isLoading) {
     return <CartSkeleton />;
   }
@@ -40,24 +58,6 @@ export const CartPage: React.FC = () => {
       </div>
     );
   }
-
-  const handleUpdateQuantity = useCallback(
-    (itemId: string, quantity: number) => {
-      updateItemMutation.mutate({ itemId, data: { quantity } });
-    },
-    [updateItemMutation]
-  );
-
-  const handleRemoveItem = useCallback(
-    (itemId: string) => {
-      removeItemMutation.mutate(itemId);
-    },
-    [removeItemMutation]
-  );
-
-  const handleClearCart = useCallback(() => {
-    clearCartMutation.mutate();
-  }, [clearCartMutation]);
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8 space-y-8">

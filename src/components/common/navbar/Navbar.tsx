@@ -1,4 +1,5 @@
-﻿import React from 'react';
+import React from 'react';
+import { useAuthStore } from '@/store';
 import { BrandLogo } from './BrandLogo';
 import { NavSearchBar } from './NavSearchBar';
 import { CartButton } from './CartButton';
@@ -9,6 +10,8 @@ export interface NavbarProps {
 }
 
 export const Navbar: React.FC<NavbarProps> = ({ cartItemCount = 0 }) => {
+  const { isAuthenticated } = useAuthStore();
+
   return (
     <header className="sticky top-0 z-30 bg-white border-b border-gray-200 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -20,7 +23,7 @@ export const Navbar: React.FC<NavbarProps> = ({ cartItemCount = 0 }) => {
           </div>
 
           <div className="flex items-center gap-3">
-            <CartButton itemCount={cartItemCount} />
+            {isAuthenticated && <CartButton itemCount={cartItemCount} />}
             <UserNav />
           </div>
         </div>

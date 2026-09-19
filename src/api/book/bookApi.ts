@@ -4,7 +4,7 @@ import { Book } from '@/types';
 
 export async function fetchBooksApi(query?: string): Promise<Book[]> {
   return apiClient<Book[]>(URLS.books.books, {
-    params: { query },
+    params: { q: query },
   });
 }
 

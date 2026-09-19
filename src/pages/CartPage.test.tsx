@@ -153,6 +153,35 @@ describe('CartPage', () => {
     expect(mockMutateClear).toHaveBeenCalled();
   });
 
+  it('handles clearing the cart and transitioning to empty state without hook errors', () => {
+    const queryMock = vi.mocked(cartHooks.useCartQuery);
+    queryMock.mockReturnValue({
+      data: mockCartWithItems,
+      isLoading: false,
+      isError: false,
+    } as any);
+
+    const { rerender } = render(<CartPage />, { wrapper });
+
+    expect(screen.getByText('Clean Code')).toBeInTheDocument();
+
+    const clearBtn = screen.getByRole('button', { name: /Clear Cart/i });
+    fireEvent.click(clearBtn);
+
+    expect(mockMutateClear).toHaveBeenCalled();
+
+    // Re-render with empty cart (simulating query invalidation / empty cart after clear)
+    queryMock.mockReturnValue({
+      data: emptyCart,
+      isLoading: false,
+      isError: false,
+    } as any);
+
+    rerender(<CartPage />);
+
+    expect(screen.getByRole('heading', { name: /Your Cart is Empty/i })).toBeInTheDocument();
+  });
+
   it('renders skeleton loader when cart is loading', () => {
     vi.mocked(cartHooks.useCartQuery).mockReturnValue({
       data: undefined,

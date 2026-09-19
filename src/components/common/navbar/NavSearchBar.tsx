@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Search } from 'lucide-react';
 import { useSearchStore } from '@/store';
 
@@ -8,6 +9,21 @@ interface NavSearchBarProps {
 
 export const NavSearchBar: React.FC<NavSearchBarProps> = ({ className = '' }) => {
   const { searchQuery, setSearchQuery } = useSearchStore();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+    if (location.pathname !== '/') {
+      navigate('/');
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && location.pathname !== '/') {
+      navigate('/');
+    }
+  };
 
   return (
     <div className={`relative ${className}`}>
@@ -17,7 +33,8 @@ export const NavSearchBar: React.FC<NavSearchBarProps> = ({ className = '' }) =>
       <input
         type="text"
         value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
+        onChange={handleChange}
+        onKeyDown={handleKeyDown}
         placeholder="Search books by title or author..."
         className="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-lg text-sm bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
       />

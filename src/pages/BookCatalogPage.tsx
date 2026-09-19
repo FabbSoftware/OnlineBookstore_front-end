@@ -1,7 +1,9 @@
 import React, { useCallback } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Sparkles, X } from 'lucide-react';
 import { useBooksQuery } from '@/api/book';
-import { useSearchStore, useToastStore } from '@/store';
+import { useAddToCartMutation } from '@/api/cart';
+import { useAuthStore, useSearchStore, useToastStore } from '@/store';
 import { BookGrid } from '@/components/books';
 import { BookGridSkeleton } from '@/components/common/skeletons';
 import { Book } from '@/types';
@@ -9,13 +11,32 @@ import { Book } from '@/types';
 export const BookCatalogPage: React.FC = () => {
   const { searchQuery, clearSearchQuery } = useSearchStore();
   const { addToast } = useToastStore();
+  const { isAuthenticated } = useAuthStore();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const addToCartMutation = useAddToCartMutation();
   const { data: books, isLoading, isError, error } = useBooksQuery(searchQuery);
 
   const handleAddToCart = useCallback(
     (book: Book) => {
-      addToast(`Added "${book.title}" to cart!`, 'success');
+      if (!isAuthenticated) {
+        addToast('Please sign in to add items to your cart.', 'info');
+        navigate('/login', { state: { from: location } });
+        return;
+      }
+      addToCartMutation.mutate(
+        { bookId: book.id, quantity: 1 },
+        {
+          onSuccess: () => {
+            addToast(`Added "${book.title}" to cart!`, 'success');
+          },
+          onError: (err) => {
+            addToast(err.message || 'Failed to add item to cart', 'error');
+          },
+        }
+      );
     },
-    [addToast]
+    [isAuthenticated, addToCartMutation, addToast, navigate, location]
   );
 
   return (

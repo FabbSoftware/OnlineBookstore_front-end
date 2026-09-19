@@ -1,8 +1,9 @@
 import React from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, AlertCircle } from 'lucide-react';
 import { useBookDetailQuery } from '@/api/book';
-import { useToastStore } from '@/store';
+import { useAddToCartMutation } from '@/api/cart';
+import { useAuthStore, useToastStore } from '@/store';
 import { BookDetailSkeleton } from '@/components/common/skeletons';
 import { BookDetailCard } from '@/components/books';
 import { Book } from '@/types';
@@ -11,6 +12,10 @@ export const BookDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { data: book, isLoading, isError } = useBookDetailQuery(id || '');
   const { addToast } = useToastStore();
+  const { isAuthenticated } = useAuthStore();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const addToCartMutation = useAddToCartMutation();
 
   if (isLoading) {
     return <BookDetailSkeleton />;
@@ -38,7 +43,22 @@ export const BookDetailPage: React.FC = () => {
   }
 
   const handleAddToCart = (item: Book, quantity: number) => {
-    addToast(`Added ${quantity} × "${item.title}" to cart!`, 'success');
+    if (!isAuthenticated) {
+      addToast('Please sign in to add items to your cart.', 'info');
+      navigate('/login', { state: { from: location } });
+      return;
+    }
+    addToCartMutation.mutate(
+      { bookId: item.id, quantity },
+      {
+        onSuccess: () => {
+          addToast(`Added ${quantity} × "${item.title}" to cart!`, 'success');
+        },
+        onError: (err) => {
+          addToast(err.message || 'Failed to add item to cart', 'error');
+        },
+      }
+    );
   };
 
   return (

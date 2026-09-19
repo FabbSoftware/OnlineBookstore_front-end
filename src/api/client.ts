@@ -1,5 +1,8 @@
 import { getAuthToken } from '../utils';
 import { ApiErrorResponse } from '../types';
+import { useAuthStore } from '../store/useAuthStore';
+import { useToastStore } from '../store/useToastStore';
+import { URLS } from './urls';
 
 export class ApiError extends Error {
   status: number;
@@ -60,6 +63,16 @@ export async function apiClient<T>(endpoint: string, options: RequestOptions = {
       }
     } catch {
       // response was not json
+    }
+
+    if (response.status === 401 && endpoint !== URLS.auth.login) {
+      const { isAuthenticated, logout } = useAuthStore.getState();
+      if (isAuthenticated) {
+        logout();
+        useToastStore.getState().addToast('Session expired. Please sign in again.', 'error');
+      } else {
+        logout();
+      }
     }
 
     throw new ApiError(response.status, errorMessage, errorData);

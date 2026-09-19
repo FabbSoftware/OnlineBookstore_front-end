@@ -4,8 +4,16 @@ import { MemoryRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BookCatalogPage } from './BookCatalogPage';
 import * as bookHooks from '@/api/book';
-import { useSearchStore } from '@/store';
+import { useAuthStore, useSearchStore, useToastStore } from '@/store';
 import { Book } from '@/types';
+
+const mockMutate = vi.fn();
+vi.mock('@/api/cart', () => ({
+  useAddToCartMutation: () => ({
+    mutate: mockMutate,
+    isPending: false,
+  }),
+}));
 
 vi.mock('@/api/book', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@/api/book')>();
@@ -22,7 +30,9 @@ describe('BookCatalogPage', () => {
     queryClient = new QueryClient({
       defaultOptions: { queries: { retry: false } },
     });
+    useAuthStore.getState().logout();
     useSearchStore.getState().clearSearchQuery();
+    useToastStore.getState().clearToasts();
     vi.clearAllMocks();
   });
 
@@ -83,5 +93,48 @@ describe('BookCatalogPage', () => {
     render(<BookCatalogPage />, { wrapper });
 
     expect(screen.getByTestId('book-grid-skeleton')).toBeInTheDocument();
+  });
+
+  it('calls addToCartMutation when Add to Cart is clicked by authenticated user', () => {
+    useAuthStore.getState().setAuth('token-123', {
+      id: 'u-1',
+      email: 'user@example.com',
+      fullName: 'John',
+      role: 'ROLE_USER',
+    });
+
+    vi.mocked(bookHooks.useBooksQuery).mockReturnValue({
+      data: mockBooks,
+      isLoading: false,
+      isError: false,
+    } as any);
+
+    render(<BookCatalogPage />, { wrapper });
+
+    const addBtn = screen.getByRole('button', { name: /Add to Cart/i });
+    fireEvent.click(addBtn);
+
+    expect(mockMutate).toHaveBeenCalledWith(
+      { bookId: 'book-1', quantity: 1 },
+      expect.any(Object)
+    );
+  });
+
+  it('redirects to /login with toast when Add to Cart is clicked by unauthenticated user', () => {
+    useAuthStore.getState().logout();
+
+    vi.mocked(bookHooks.useBooksQuery).mockReturnValue({
+      data: mockBooks,
+      isLoading: false,
+      isError: false,
+    } as any);
+
+    render(<BookCatalogPage />, { wrapper });
+
+    const addBtn = screen.getByRole('button', { name: /Add to Cart/i });
+    fireEvent.click(addBtn);
+
+    expect(mockMutate).not.toHaveBeenCalled();
+    expect(useToastStore.getState().toasts[0].message).toBe('Please sign in to add items to your cart.');
   });
 });

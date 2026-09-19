@@ -11,7 +11,7 @@ describe('Navbar component', () => {
     useToastStore.getState().clearToasts();
   });
 
-  it('renders brand logo, search bar, cart button, and unauthenticated user nav', () => {
+  it('renders brand logo, search bar, and unauthenticated user nav without cart button', () => {
     render(
       <MemoryRouter>
         <Navbar cartItemCount={0} />
@@ -20,7 +20,7 @@ describe('Navbar component', () => {
 
     expect(screen.getByLabelText(/BookStore/i)).toBeInTheDocument();
     expect(screen.getAllByPlaceholderText(/Search books by title or author/i).length).toBeGreaterThanOrEqual(1);
-    expect(screen.getByRole('link', { name: /shopping cart/i })).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: /shopping cart/i })).not.toBeInTheDocument();
     expect(screen.getByRole('link', { name: /Sign In/i })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /Sign Up/i })).toBeInTheDocument();
   });
@@ -39,6 +39,7 @@ describe('Navbar component', () => {
       </MemoryRouter>
     );
 
+    expect(screen.getByRole('link', { name: /shopping cart/i })).toBeInTheDocument();
     expect(screen.getByText(/Jane Doe/i)).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /My Orders/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Logout/i })).toBeInTheDocument();

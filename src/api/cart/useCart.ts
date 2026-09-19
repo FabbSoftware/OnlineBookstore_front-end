@@ -18,8 +18,11 @@ export const cartQueryOptions = queryOptions({
   queryFn: () => fetchCartApi(),
 });
 
-export function useCartQuery() {
-  return useQuery(cartQueryOptions);
+export function useCartQuery(options?: { enabled?: boolean }) {
+  return useQuery({
+    ...cartQueryOptions,
+    enabled: options?.enabled ?? true,
+  });
 }
 
 export function useAddToCartMutation() {

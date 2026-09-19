@@ -36,7 +36,7 @@ describe('bookApi', () => {
     const result = await fetchBooksApi();
 
     expect(client.apiClient).toHaveBeenCalledWith(URLS.books.books, {
-      params: { query: undefined },
+      params: { q: undefined },
     });
     expect(result).toEqual(mockBooks);
   });
@@ -47,7 +47,7 @@ describe('bookApi', () => {
     const result = await fetchBooksApi('Clean');
 
     expect(client.apiClient).toHaveBeenCalledWith(URLS.books.books, {
-      params: { query: 'Clean' },
+      params: { q: 'Clean' },
     });
     expect(result).toEqual([mockBooks[0]]);
   });
