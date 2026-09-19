@@ -3,12 +3,16 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { OrderHistoryPage } from './OrderHistoryPage';
-import * as orderHooks from '@/hooks/useOrders';
+import * as orderHooks from '@/api/order';
 import { Order } from '@/types';
 
-vi.mock('@/hooks/useOrders', () => ({
-  useOrdersQuery: vi.fn(),
-}));
+vi.mock('@/api/order', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/api/order')>();
+  return {
+    ...actual,
+    useOrdersQuery: vi.fn(),
+  };
+});
 
 describe('OrderHistoryPage', () => {
   let queryClient: QueryClient;

@@ -7,11 +7,12 @@ import {
   useCheckoutMutation,
   ordersQueryOptions,
   orderDetailQueryOptions,
+  ORDERS_QUERY_KEYS,
 } from './useOrders';
-import * as orderApi from '@/api/orderApi';
+import * as orderApi from './orderApi';
 import { Order } from '@/types';
 
-vi.mock('@/api/orderApi', () => ({
+vi.mock('./orderApi', () => ({
   createOrderApi: vi.fn(),
   fetchOrdersApi: vi.fn(),
   fetchOrderByIdApi: vi.fn(),
@@ -40,6 +41,12 @@ describe('useOrders hooks', () => {
     totalAmount: 60.0,
     items: [],
   };
+
+  it('provides ORDERS_QUERY_KEYS structure', () => {
+    expect(ORDERS_QUERY_KEYS.default).toBe('orders');
+    expect(ORDERS_QUERY_KEYS.orders()).toEqual(['orders']);
+    expect(ORDERS_QUERY_KEYS.order('order-1')).toEqual(['orders', 'detail', 'order-1']);
+  });
 
   it('ordersQueryOptions produces expected queryKey and calls fetchOrdersApi', async () => {
     const options = ordersQueryOptions;

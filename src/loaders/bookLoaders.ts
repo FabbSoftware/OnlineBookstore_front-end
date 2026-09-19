@@ -1,6 +1,6 @@
 import { QueryClient } from '@tanstack/react-query';
 import { LoaderFunctionArgs } from 'react-router-dom';
-import { booksQueryOptions, bookDetailQueryOptions } from '@/hooks/useBooks';
+import { booksQueryOptions, bookDetailQueryOptions } from '@/api/book';
 
 export const catalogLoader =
   (queryClient: QueryClient) =>

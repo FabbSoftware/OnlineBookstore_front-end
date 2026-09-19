@@ -1,7 +1,12 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { loginApi, registerApi } from '../api/authApi';
-import { useAuthStore } from '../store/useAuthStore';
-import { AuthResponse, LoginRequest, RegisterRequest } from '../types';
+import { loginApi, registerApi } from './authApi';
+import { useAuthStore } from '@/store/useAuthStore';
+import { AuthResponse, LoginRequest, RegisterRequest } from '@/types';
+
+export const AUTH_QUERY_KEYS = {
+  default: 'auth' as const,
+  user: () => [AUTH_QUERY_KEYS.default, 'user'] as const,
+};
 
 export const useLoginMutation = () => {
   const setAuth = useAuthStore((state) => state.setAuth);

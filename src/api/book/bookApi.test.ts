@@ -1,9 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import * as client from './client';
+import * as client from '../client';
 import { fetchBooksApi, fetchBookByIdApi } from './bookApi';
+import { URLS } from '../urls';
 import { Book } from '@/types';
 
-vi.mock('./client', () => ({
+vi.mock('../client', () => ({
   apiClient: vi.fn(),
 }));
 
@@ -34,7 +35,7 @@ describe('bookApi', () => {
 
     const result = await fetchBooksApi();
 
-    expect(client.apiClient).toHaveBeenCalledWith('/books', {
+    expect(client.apiClient).toHaveBeenCalledWith(URLS.books.books, {
       params: { query: undefined },
     });
     expect(result).toEqual(mockBooks);
@@ -45,7 +46,7 @@ describe('bookApi', () => {
 
     const result = await fetchBooksApi('Clean');
 
-    expect(client.apiClient).toHaveBeenCalledWith('/books', {
+    expect(client.apiClient).toHaveBeenCalledWith(URLS.books.books, {
       params: { query: 'Clean' },
     });
     expect(result).toEqual([mockBooks[0]]);
@@ -56,7 +57,7 @@ describe('bookApi', () => {
 
     const result = await fetchBookByIdApi('book-1');
 
-    expect(client.apiClient).toHaveBeenCalledWith('/books/book-1');
+    expect(client.apiClient).toHaveBeenCalledWith(URLS.books.bookById('book-1'));
     expect(result).toEqual(mockBooks[0]);
   });
 });

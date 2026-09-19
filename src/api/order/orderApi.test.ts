@@ -1,9 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import * as client from './client';
+import * as client from '../client';
 import { createOrderApi, fetchOrdersApi, fetchOrderByIdApi } from './orderApi';
+import { URLS } from '../urls';
 import { Order } from '@/types';
 
-vi.mock('./client', () => ({
+vi.mock('../client', () => ({
   apiClient: vi.fn(),
 }));
 
@@ -30,7 +31,7 @@ describe('orderApi', () => {
       contactPhone: '+1-555-5555',
     });
 
-    expect(client.apiClient).toHaveBeenCalledWith('/orders', {
+    expect(client.apiClient).toHaveBeenCalledWith(URLS.orders.orders, {
       method: 'POST',
       body: JSON.stringify({
         shippingAddress: '123 Main St',
@@ -45,7 +46,7 @@ describe('orderApi', () => {
 
     const result = await fetchOrdersApi();
 
-    expect(client.apiClient).toHaveBeenCalledWith('/orders');
+    expect(client.apiClient).toHaveBeenCalledWith(URLS.orders.orders);
     expect(result).toEqual([mockOrder]);
   });
 
@@ -54,7 +55,7 @@ describe('orderApi', () => {
 
     const result = await fetchOrderByIdApi('order-1');
 
-    expect(client.apiClient).toHaveBeenCalledWith('/orders/order-1');
+    expect(client.apiClient).toHaveBeenCalledWith(URLS.orders.orderById('order-1'));
     expect(result).toEqual(mockOrder);
   });
 });

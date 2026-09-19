@@ -6,7 +6,7 @@ import {
   useUpdateCartItemMutation,
   useRemoveCartItemMutation,
   useClearCartMutation,
-} from '@/hooks/useCart';
+} from '@/api/cart';
 import { CartSkeleton } from '@/components/common/skeletons/CartSkeleton';
 import { EmptyState } from '@/components/common/EmptyState';
 import { MemoizedCartItemRow } from '@/components/cart/MemoizedCartItemRow';

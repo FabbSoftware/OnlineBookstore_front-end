@@ -3,13 +3,17 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BookCatalogPage } from './BookCatalogPage';
-import * as bookHooks from '@/hooks/useBooks';
+import * as bookHooks from '@/api/book';
 import { useSearchStore } from '@/store/useSearchStore';
 import { Book } from '@/types';
 
-vi.mock('@/hooks/useBooks', () => ({
-  useBooksQuery: vi.fn(),
-}));
+vi.mock('@/api/book', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/api/book')>();
+  return {
+    ...actual,
+    useBooksQuery: vi.fn(),
+  };
+});
 
 describe('BookCatalogPage', () => {
   let queryClient: QueryClient;

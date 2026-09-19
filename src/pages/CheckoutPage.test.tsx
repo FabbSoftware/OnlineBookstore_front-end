@@ -3,8 +3,8 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { CheckoutPage } from './CheckoutPage';
-import * as cartHooks from '@/hooks/useCart';
-import * as orderHooks from '@/hooks/useOrders';
+import * as cartHooks from '@/api/cart';
+import * as orderHooks from '@/api/order';
 import { Cart } from '@/types';
 
 const mockedNavigate = vi.fn();
@@ -16,13 +16,21 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
-vi.mock('@/hooks/useCart', () => ({
-  useCartQuery: vi.fn(),
-}));
+vi.mock('@/api/cart', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/api/cart')>();
+  return {
+    ...actual,
+    useCartQuery: vi.fn(),
+  };
+});
 
-vi.mock('@/hooks/useOrders', () => ({
-  useCheckoutMutation: vi.fn(),
-}));
+vi.mock('@/api/order', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/api/order')>();
+  return {
+    ...actual,
+    useCheckoutMutation: vi.fn(),
+  };
+});
 
 describe('CheckoutPage', () => {
   let queryClient: QueryClient;

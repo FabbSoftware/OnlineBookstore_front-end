@@ -2,11 +2,17 @@ import React from 'react';
 import { renderHook, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { useBooksQuery, useBookDetailQuery, booksQueryOptions, bookDetailQueryOptions } from './useBooks';
-import * as bookApi from '@/api/bookApi';
+import {
+  useBooksQuery,
+  useBookDetailQuery,
+  booksQueryOptions,
+  bookDetailQueryOptions,
+  BOOKS_QUERY_KEYS,
+} from './useBooks';
+import * as bookApi from './bookApi';
 import { Book } from '@/types';
 
-vi.mock('@/api/bookApi', () => ({
+vi.mock('./bookApi', () => ({
   fetchBooksApi: vi.fn(),
   fetchBookByIdApi: vi.fn(),
 }));
@@ -34,6 +40,13 @@ describe('useBooks hooks', () => {
       stockQuantity: 7,
     },
   ];
+
+  it('BOOKS_QUERY_KEYS generates expected keys', () => {
+    expect(BOOKS_QUERY_KEYS.default).toBe('books');
+    expect(BOOKS_QUERY_KEYS.books('Martin')).toEqual(['books', { query: 'Martin' }]);
+    expect(BOOKS_QUERY_KEYS.books()).toEqual(['books', { query: '' }]);
+    expect(BOOKS_QUERY_KEYS.book('book-1')).toEqual(['books', 'detail', 'book-1']);
+  });
 
   it('booksQueryOptions produces expected queryKey and calls fetchBooksApi', async () => {
     const options = booksQueryOptions('Martin');

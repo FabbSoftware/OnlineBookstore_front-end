@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import * as client from './client';
+import * as client from '../client';
 import {
   fetchCartApi,
   addToCartApi,
@@ -7,9 +7,10 @@ import {
   removeCartItemApi,
   clearCartApi,
 } from './cartApi';
+import { URLS } from '../urls';
 import { Cart } from '@/types';
 
-vi.mock('./client', () => ({
+vi.mock('../client', () => ({
   apiClient: vi.fn(),
 }));
 
@@ -40,7 +41,7 @@ describe('cartApi', () => {
 
     const result = await fetchCartApi();
 
-    expect(client.apiClient).toHaveBeenCalledWith('/cart');
+    expect(client.apiClient).toHaveBeenCalledWith(URLS.cart.cart);
     expect(result).toEqual(mockCart);
   });
 
@@ -49,7 +50,7 @@ describe('cartApi', () => {
 
     const result = await addToCartApi({ bookId: 'book-1', quantity: 2 });
 
-    expect(client.apiClient).toHaveBeenCalledWith('/cart/items', {
+    expect(client.apiClient).toHaveBeenCalledWith(URLS.cart.items, {
       method: 'POST',
       body: JSON.stringify({ bookId: 'book-1', quantity: 2 }),
     });
@@ -61,7 +62,7 @@ describe('cartApi', () => {
 
     const result = await updateCartItemApi('item-1', { quantity: 3 });
 
-    expect(client.apiClient).toHaveBeenCalledWith('/cart/items/item-1', {
+    expect(client.apiClient).toHaveBeenCalledWith(URLS.cart.itemById('item-1'), {
       method: 'PUT',
       body: JSON.stringify({ quantity: 3 }),
     });
@@ -69,14 +70,14 @@ describe('cartApi', () => {
   });
 
   it('removeCartItemApi calls DELETE /cart/items/{itemId}', async () => {
-    vi.mocked(client.apiClient).mockResolvedValue({ ...mockCart, items: [], totalItems: 0, totalAmount: 0 });
+    vi.mocked(client.apiClient).mockResolvedValue(mockCart);
 
     const result = await removeCartItemApi('item-1');
 
-    expect(client.apiClient).toHaveBeenCalledWith('/cart/items/item-1', {
+    expect(client.apiClient).toHaveBeenCalledWith(URLS.cart.itemById('item-1'), {
       method: 'DELETE',
     });
-    expect(result.items).toHaveLength(0);
+    expect(result).toEqual(mockCart);
   });
 
   it('clearCartApi calls DELETE /cart', async () => {
@@ -84,7 +85,7 @@ describe('cartApi', () => {
 
     await clearCartApi();
 
-    expect(client.apiClient).toHaveBeenCalledWith('/cart', {
+    expect(client.apiClient).toHaveBeenCalledWith(URLS.cart.cart, {
       method: 'DELETE',
     });
   });

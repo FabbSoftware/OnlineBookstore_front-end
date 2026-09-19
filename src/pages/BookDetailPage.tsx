@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, AlertCircle } from 'lucide-react';
-import { useBookDetailQuery } from '@/hooks/useBooks';
+import { useBookDetailQuery } from '@/api/book';
 import { useToastStore } from '@/store/useToastStore';
 import { BookDetailSkeleton } from '@/components/common/skeletons/BookDetailSkeleton';
 import { BookDetailCard } from '@/components/books/BookDetailCard';

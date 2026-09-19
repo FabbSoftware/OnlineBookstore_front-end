@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { Sparkles, X } from 'lucide-react';
-import { useBooksQuery } from '@/hooks/useBooks';
+import { useBooksQuery } from '@/api/book';
 import { useSearchStore } from '@/store/useSearchStore';
 import { useToastStore } from '@/store/useToastStore';
 import { BookGrid } from '@/components/books/BookGrid';

@@ -1,10 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { QueryClient } from '@tanstack/react-query';
 import { cartLoader } from './cartLoader';
-import * as cartApi from '@/api/cartApi';
+import * as cartApi from '@/api/cart/cartApi';
 import { Cart } from '@/types';
 
-vi.mock('@/api/cartApi', () => ({
+vi.mock('@/api/cart/cartApi', () => ({
   fetchCartApi: vi.fn(),
 }));
 

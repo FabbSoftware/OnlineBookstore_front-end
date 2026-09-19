@@ -1,11 +1,11 @@
-﻿import React from 'react';
+import React from 'react';
 import { renderHook, waitFor } from '@testing-library/react';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { useLoginMutation, useRegisterMutation } from './useAuth';
-import { useAuthStore } from '../store/useAuthStore';
-import * as authApi from '../api/authApi';
-import { AuthResponse } from '../types';
+import { useLoginMutation, useRegisterMutation, AUTH_QUERY_KEYS } from './useAuth';
+import { useAuthStore } from '@/store/useAuthStore';
+import * as authApi from './authApi';
+import { AuthResponse } from '@/types';
 
 describe('useAuth hooks', () => {
   let queryClient: QueryClient;
@@ -35,6 +35,11 @@ describe('useAuth hooks', () => {
   const wrapper = ({ children }: { children: React.ReactNode }) => (
     <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
   );
+
+  it('provides AUTH_QUERY_KEYS structure', () => {
+    expect(AUTH_QUERY_KEYS.default).toBe('auth');
+    expect(AUTH_QUERY_KEYS.user()).toEqual(['auth', 'user']);
+  });
 
   it('handles login mutation and updates auth store', async () => {
     vi.spyOn(authApi, 'loginApi').mockResolvedValue(mockResponse);

@@ -5,11 +5,16 @@ import {
   updateCartItemApi,
   removeCartItemApi,
   clearCartApi,
-} from '@/api/cartApi';
+} from './cartApi';
 import { AddToCartRequest, UpdateCartItemRequest } from '@/types';
 
+export const CART_QUERY_KEYS = {
+  default: 'cart',
+  cart: () => [CART_QUERY_KEYS.default] as const,
+};
+
 export const cartQueryOptions = queryOptions({
-  queryKey: ['cart'],
+  queryKey: CART_QUERY_KEYS.cart(),
   queryFn: () => fetchCartApi(),
 });
 
@@ -22,7 +27,7 @@ export function useAddToCartMutation() {
   return useMutation({
     mutationFn: (data: AddToCartRequest) => addToCartApi(data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['cart'] });
+      queryClient.invalidateQueries({ queryKey: CART_QUERY_KEYS.cart() });
     },
   });
 }
@@ -33,7 +38,7 @@ export function useUpdateCartItemMutation() {
     mutationFn: ({ itemId, data }: { itemId: string; data: UpdateCartItemRequest }) =>
       updateCartItemApi(itemId, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['cart'] });
+      queryClient.invalidateQueries({ queryKey: CART_QUERY_KEYS.cart() });
     },
   });
 }
@@ -43,7 +48,7 @@ export function useRemoveCartItemMutation() {
   return useMutation({
     mutationFn: (itemId: string) => removeCartItemApi(itemId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['cart'] });
+      queryClient.invalidateQueries({ queryKey: CART_QUERY_KEYS.cart() });
     },
   });
 }
@@ -53,7 +58,7 @@ export function useClearCartMutation() {
   return useMutation({
     mutationFn: () => clearCartApi(),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['cart'] });
+      queryClient.invalidateQueries({ queryKey: CART_QUERY_KEYS.cart() });
     },
   });
 }

@@ -9,11 +9,12 @@ import {
   useRemoveCartItemMutation,
   useClearCartMutation,
   cartQueryOptions,
+  CART_QUERY_KEYS,
 } from './useCart';
-import * as cartApi from '@/api/cartApi';
+import * as cartApi from './cartApi';
 import { Cart } from '@/types';
 
-vi.mock('@/api/cartApi', () => ({
+vi.mock('./cartApi', () => ({
   fetchCartApi: vi.fn(),
   addToCartApi: vi.fn(),
   updateCartItemApi: vi.fn(),
@@ -51,6 +52,11 @@ describe('useCart hooks', () => {
     totalItems: 1,
     totalAmount: 35.0,
   };
+
+  it('provides CART_QUERY_KEYS structure', () => {
+    expect(CART_QUERY_KEYS.default).toBe('cart');
+    expect(CART_QUERY_KEYS.cart()).toEqual(['cart']);
+  });
 
   it('cartQueryOptions produces expected queryKey and calls fetchCartApi', async () => {
     const options = cartQueryOptions;

@@ -1,6 +1,6 @@
 import { QueryClient } from '@tanstack/react-query';
 import { LoaderFunctionArgs } from 'react-router-dom';
-import { ordersQueryOptions } from '@/hooks/useOrders';
+import { ordersQueryOptions } from '@/api/order';
 
 export const ordersLoader =
   (queryClient: QueryClient) =>

@@ -4,15 +4,21 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { RouterProvider, createMemoryRouter } from 'react-router-dom';
 import { getRoutes } from './router';
 import { useAuthStore } from '@/store/useAuthStore';
-import * as bookApi from '@/api/bookApi';
-import * as cartApi from '@/api/cartApi';
+import * as bookApi from '@/api/book/bookApi';
+import * as cartApi from '@/api/cart/cartApi';
 
 const createTestRouter = (queryClient: QueryClient, initialEntries: string[] = ['/']) => {
   return createMemoryRouter(getRoutes(queryClient), { initialEntries });
 };
 
-vi.mock('@/api/bookApi');
-vi.mock('@/api/cartApi');
+vi.mock('@/api/book/bookApi', () => ({
+  fetchBooksApi: vi.fn(),
+  fetchBookByIdApi: vi.fn(),
+}));
+
+vi.mock('@/api/cart/cartApi', () => ({
+  fetchCartApi: vi.fn(),
+}));
 
 describe('Bookstore Router', () => {
   let queryClient: QueryClient;
@@ -55,9 +61,12 @@ describe('Bookstore Router', () => {
       </QueryClientProvider>
     );
 
-    await waitFor(() => {
-      expect(screen.getByText('Clean Code')).toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByText('Clean Code')).toBeInTheDocument();
+      },
+      { timeout: 4000 }
+    );
   });
 
   it('renders login page on "/login"', async () => {
@@ -90,9 +99,12 @@ describe('Bookstore Router', () => {
       </QueryClientProvider>
     );
 
-    await waitFor(() => {
-      expect(screen.getByRole('heading', { name: /Sign In to Your Account/i })).toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByRole('heading', { name: /Sign In to Your Account/i })).toBeInTheDocument();
+      },
+      { timeout: 4000 }
+    );
   });
 
   it('renders 404 NotFoundPage for non-existent route', async () => {

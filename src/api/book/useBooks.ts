@@ -1,15 +1,21 @@
 import { useQuery, queryOptions } from '@tanstack/react-query';
-import { fetchBooksApi, fetchBookByIdApi } from '@/api/bookApi';
+import { fetchBooksApi, fetchBookByIdApi } from './bookApi';
+
+export const BOOKS_QUERY_KEYS = {
+  default: 'books',
+  books: (query?: string) => [BOOKS_QUERY_KEYS.default, { query: query || '' }] as const,
+  book: (id: string) => [BOOKS_QUERY_KEYS.default, 'detail', id] as const,
+};
 
 export const booksQueryOptions = (query?: string) =>
   queryOptions({
-    queryKey: ['books', { query: query || '' }],
+    queryKey: BOOKS_QUERY_KEYS.books(query),
     queryFn: () => fetchBooksApi(query),
   });
 
 export const bookDetailQueryOptions = (id: string) =>
   queryOptions({
-    queryKey: ['books', 'detail', id],
+    queryKey: BOOKS_QUERY_KEYS.book(id),
     queryFn: () => fetchBookByIdApi(id),
     enabled: !!id,
   });

@@ -1,10 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { QueryClient } from '@tanstack/react-query';
 import { catalogLoader, bookDetailLoader } from './bookLoaders';
-import * as bookApi from '@/api/bookApi';
+import * as bookApi from '@/api/book/bookApi';
 import { Book } from '@/types';
 
-vi.mock('@/api/bookApi', () => ({
+vi.mock('@/api/book/bookApi', () => ({
   fetchBooksApi: vi.fn(),
   fetchBookByIdApi: vi.fn(),
 }));

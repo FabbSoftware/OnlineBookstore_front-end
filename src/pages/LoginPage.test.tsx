@@ -3,7 +3,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { LoginPage } from './LoginPage';
-import * as authApi from '@/api/authApi';
+import * as authApi from '@/api/auth/authApi';
 import { useAuthStore } from '@/store/useAuthStore';
 
 const mockedNavigate = vi.fn();

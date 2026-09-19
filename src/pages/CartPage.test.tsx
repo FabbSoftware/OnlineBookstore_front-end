@@ -3,15 +3,19 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { CartPage } from './CartPage';
-import * as cartHooks from '@/hooks/useCart';
+import * as cartHooks from '@/api/cart';
 import { Cart } from '@/types';
 
-vi.mock('@/hooks/useCart', () => ({
-  useCartQuery: vi.fn(),
-  useUpdateCartItemMutation: vi.fn(),
-  useRemoveCartItemMutation: vi.fn(),
-  useClearCartMutation: vi.fn(),
-}));
+vi.mock('@/api/cart', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/api/cart')>();
+  return {
+    ...actual,
+    useCartQuery: vi.fn(),
+    useUpdateCartItemMutation: vi.fn(),
+    useRemoveCartItemMutation: vi.fn(),
+    useClearCartMutation: vi.fn(),
+  };
+});
 
 describe('CartPage', () => {
   let queryClient: QueryClient;
