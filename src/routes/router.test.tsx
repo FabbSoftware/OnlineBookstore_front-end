@@ -1,11 +1,15 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { RouterProvider } from 'react-router-dom';
-import { createTestRouter } from './router';
+import { RouterProvider, createMemoryRouter } from 'react-router-dom';
+import { getRoutes } from './router';
 import { useAuthStore } from '@/store/useAuthStore';
 import * as bookApi from '@/api/bookApi';
 import * as cartApi from '@/api/cartApi';
+
+const createTestRouter = (queryClient: QueryClient, initialEntries: string[] = ['/']) => {
+  return createMemoryRouter(getRoutes(queryClient), { initialEntries });
+};
 
 vi.mock('@/api/bookApi');
 vi.mock('@/api/cartApi');
@@ -22,24 +26,21 @@ describe('Bookstore Router', () => {
     useAuthStore.getState().logout();
     vi.clearAllMocks();
 
-    vi.mocked(bookApi.getBooks).mockResolvedValue({
-      books: [
-        {
-          id: 'b-1',
-          title: 'Clean Code',
-          author: 'Robert C. Martin',
-          price: 30.0,
-          description: 'A handbook of agile software craftsmanship',
-          coverImageUrl: 'https://example.com/cover.jpg',
-          category: 'Software Engineering',
-          stock: 10,
-          rating: 4.8,
-        },
-      ],
-      total: 1,
-    });
+    vi.mocked(bookApi.fetchBooksApi).mockResolvedValue([
+      {
+        id: 'b-1',
+        title: 'Clean Code',
+        author: 'Robert C. Martin',
+        price: 30.0,
+        description: 'A handbook of agile software craftsmanship',
+        coverImageUrl: 'https://example.com/cover.jpg',
+        category: 'Software Engineering',
+        stock: 10,
+        rating: 4.8,
+      },
+    ]);
 
-    vi.mocked(cartApi.getCart).mockResolvedValue({
+    vi.mocked(cartApi.fetchCartApi).mockResolvedValue({
       id: 'cart-1',
       items: [],
       totalItems: 0,
