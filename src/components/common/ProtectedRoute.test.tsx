@@ -32,7 +32,7 @@ describe('ProtectedRoute', () => {
 
   it('renders children when user is authenticated', () => {
     useAuthStore.setState({
-      user: { id: 'u-1', email: 'test@example.com', fullName: 'Test User' },
+      user: { id: 'u-1', email: 'test@example.com', fullName: 'Test User', role: 'ROLE_USER' },
       token: 'jwt-token',
       isAuthenticated: true,
     });
@@ -59,7 +59,7 @@ describe('ProtectedRoute', () => {
 
   it('renders Outlet when children not passed and user is authenticated', () => {
     useAuthStore.setState({
-      user: { id: 'u-1', email: 'test@example.com', fullName: 'Test User' },
+      user: { id: 'u-1', email: 'test@example.com', fullName: 'Test User', role: 'ROLE_USER' },
       token: 'jwt-token',
       isAuthenticated: true,
     });

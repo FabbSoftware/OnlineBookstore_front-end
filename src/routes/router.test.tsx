@@ -34,9 +34,8 @@ describe('Bookstore Router', () => {
         price: 30.0,
         description: 'A handbook of agile software craftsmanship',
         coverImageUrl: 'https://example.com/cover.jpg',
-        category: 'Software Engineering',
-        stock: 10,
-        rating: 4.8,
+        stockQuantity: 10,
+        isbn: '9780132350884',
       },
     ]);
 

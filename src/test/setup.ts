@@ -4,7 +4,6 @@ import '@testing-library/jest-dom';
 const OriginalRequest = globalThis.Request;
 
 if (OriginalRequest) {
-  // @ts-expect-error Node 24 / JSDOM environment Request shim
   globalThis.Request = class extends OriginalRequest {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     constructor(input: any, init?: any) {

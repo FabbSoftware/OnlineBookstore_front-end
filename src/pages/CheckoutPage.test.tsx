@@ -98,7 +98,7 @@ describe('CheckoutPage', () => {
       isLoading: false,
     } as any);
 
-    mockMutateCheckout.mockImplementation((data, { onSuccess }) => {
+    mockMutateCheckout.mockImplementation((_data, { onSuccess }) => {
       onSuccess({ id: 'order-123' });
     });
 

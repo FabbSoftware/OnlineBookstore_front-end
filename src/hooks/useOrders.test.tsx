@@ -4,7 +4,6 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import {
   useOrdersQuery,
-  useOrderByIdQuery,
   useCheckoutMutation,
   ordersQueryOptions,
   orderDetailQueryOptions,
