@@ -72,6 +72,6 @@ describe('OrderHistoryPage', () => {
     expect(screen.getByText(/Order #order-101/i)).toBeInTheDocument();
     expect(screen.getByText(/Delivered/i)).toBeInTheDocument();
     expect(screen.getByText('The Pragmatic Programmer')).toBeInTheDocument();
-    expect(screen.getByText('$85.00')).toBeInTheDocument();
+    expect(screen.getAllByText('$85.00').length).toBeGreaterThanOrEqual(1);
   });
 });

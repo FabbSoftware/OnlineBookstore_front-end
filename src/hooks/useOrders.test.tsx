@@ -89,5 +89,6 @@ describe('useOrders hooks', () => {
     });
     expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['orders'] });
     expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['cart'] });
+    expect(invalidateSpy).toHaveBeenCalledTimes(2);
   });
 });

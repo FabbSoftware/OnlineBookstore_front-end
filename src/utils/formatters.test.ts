@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { formatCurrency } from './formatters';
+import { formatCurrency, formatDate } from './formatters';
 
 describe('formatCurrency', () => {
   it('formats positive numbers as USD currency', () => {
@@ -14,5 +14,12 @@ describe('formatCurrency', () => {
 
   it('formats large numbers with commas', () => {
     expect(formatCurrency(1250.75)).toBe('$1,250.75');
+  });
+});
+
+describe('formatDate', () => {
+  it('formats date using en-US by default', () => {
+    const formatted = formatDate('2026-09-18T12:00:00Z');
+    expect(formatted).toMatch(/Sep 18, 2026/);
   });
 });

@@ -12,7 +12,7 @@ const TestForm = () => {
 
   return (
     <form noValidate onSubmit={handleSubmit(() => {})}>
-      <AddressInput register={register} error={errors.address} />
+      <AddressInput name="address" register={register} error={errors.address} />
       <button type="submit">Submit</button>
     </form>
   );
