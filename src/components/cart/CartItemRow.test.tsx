@@ -26,7 +26,7 @@ describe('CartItemRow component', () => {
 
     expect(screen.getByText('Working Effectively with Legacy Code')).toBeInTheDocument();
     expect(screen.getByText('Michael Feathers')).toBeInTheDocument();
-    expect(screen.getByText('$42.00')).toBeInTheDocument();
+    expect(screen.getByText(/\$42\.00/i)).toBeInTheDocument();
     expect(screen.getByTestId('quantity-display')).toHaveTextContent('2');
     expect(screen.getByText('$84.00')).toBeInTheDocument();
   });

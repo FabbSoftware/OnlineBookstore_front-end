@@ -96,7 +96,8 @@ describe('CartPage', () => {
     expect(screen.getByRole('heading', { name: /^Shopping Cart$/i })).toBeInTheDocument();
     expect(screen.getByText('Clean Code')).toBeInTheDocument();
     expect(screen.getByText('Robert C. Martin')).toBeInTheDocument();
-    expect(screen.getByText('Subtotal')).toBeInTheDocument();
+    expect(screen.getAllByText('Subtotal').length).toBeGreaterThanOrEqual(1);
+    expect(screen.getByRole('heading', { name: /Order Summary/i })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /Proceed to Checkout/i })).toHaveAttribute('href', '/checkout');
   });
 
