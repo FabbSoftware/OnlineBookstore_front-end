@@ -6,7 +6,9 @@ import { BookCover } from './BookCover';
 import { StockBadge } from './StockBadge';
 import { BookInfo } from './BookInfo';
 
-interface BookCardProps {
+import { formatCurrency } from '@/utils/formatters';
+
+export interface BookCardProps {
   book: Book;
   onAddToCart?: (book: Book) => void;
 }
@@ -42,7 +44,7 @@ export const BookCard: React.FC<BookCardProps> = ({ book, onAddToCart }) => {
           <div>
             <span className="text-xs text-gray-400 block font-normal">Price</span>
             <span className="text-xl font-bold text-gray-900">
-              ${book.price.toFixed(2)}
+              {formatCurrency(book.price)}
             </span>
           </div>
 

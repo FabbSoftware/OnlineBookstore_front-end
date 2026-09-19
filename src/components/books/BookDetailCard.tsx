@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { ShoppingCart, Plus, Minus } from 'lucide-react';
+import { ShoppingCart } from 'lucide-react';
 import { Book } from '@/types';
 import { BookCover } from './BookCover';
 import { StockBadge } from './StockBadge';
 import { BookInfo } from './BookInfo';
+import { QuantitySelector } from '@/components/common/QuantitySelector';
+import { formatCurrency } from '@/utils/formatters';
 
 export interface BookDetailCardProps {
   book: Book;
@@ -13,19 +15,6 @@ export interface BookDetailCardProps {
 export const BookDetailCard: React.FC<BookDetailCardProps> = ({ book, onAddToCart }) => {
   const [quantity, setQuantity] = useState(1);
   const isOutOfStock = book.stockQuantity <= 0;
-  const isAtMaxStock = quantity >= book.stockQuantity;
-
-  const handleIncrement = () => {
-    if (quantity < book.stockQuantity) {
-      setQuantity((prev) => prev + 1);
-    }
-  };
-
-  const handleDecrement = () => {
-    if (quantity > 1) {
-      setQuantity((prev) => prev - 1);
-    }
-  };
 
   const handleAddToCart = () => {
     if (isOutOfStock) return;
@@ -65,7 +54,7 @@ export const BookDetailCard: React.FC<BookDetailCardProps> = ({ book, onAddToCar
             />
 
             <div className="text-3xl font-black text-gray-900 pt-2">
-              ${book.price.toFixed(2)}
+              {formatCurrency(book.price)}
             </div>
           </div>
 
@@ -73,32 +62,13 @@ export const BookDetailCard: React.FC<BookDetailCardProps> = ({ book, onAddToCar
           <div className="pt-6 border-t border-gray-100 space-y-4">
             <div className="flex items-center gap-4">
               <span className="text-sm font-medium text-gray-700">Quantity</span>
-              <div className="flex items-center border border-gray-200 rounded-xl bg-gray-50 overflow-hidden">
-                <button
-                  type="button"
-                  onClick={handleDecrement}
-                  disabled={isOutOfStock || quantity <= 1}
-                  aria-label="Decrease quantity"
-                  className="p-2.5 text-gray-600 hover:text-indigo-600 hover:bg-gray-100 disabled:text-gray-300 disabled:hover:bg-transparent transition-colors cursor-pointer"
-                >
-                  <Minus className="w-4 h-4" />
-                </button>
-                <span
-                  data-testid="quantity-display"
-                  className="px-4 py-1 text-sm font-semibold text-gray-900 min-w-[2.5rem] text-center"
-                >
-                  {quantity}
-                </span>
-                <button
-                  type="button"
-                  onClick={handleIncrement}
-                  disabled={isOutOfStock || isAtMaxStock}
-                  aria-label="Increase quantity"
-                  className="p-2.5 text-gray-600 hover:text-indigo-600 hover:bg-gray-100 disabled:text-gray-300 disabled:hover:bg-transparent transition-colors cursor-pointer"
-                >
-                  <Plus className="w-4 h-4" />
-                </button>
-              </div>
+              <QuantitySelector
+                value={quantity}
+                onChange={setQuantity}
+                min={1}
+                max={book.stockQuantity}
+                disabled={isOutOfStock}
+              />
             </div>
 
             <button

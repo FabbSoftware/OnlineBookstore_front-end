@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Sparkles, X } from 'lucide-react';
 import { useBooksQuery } from '@/hooks/useBooks';
 import { useSearchStore } from '@/store/useSearchStore';
@@ -12,9 +12,12 @@ export const BookCatalogPage: React.FC = () => {
   const { addToast } = useToastStore();
   const { data: books, isLoading, isError, error } = useBooksQuery(searchQuery);
 
-  const handleAddToCart = (book: Book) => {
-    addToast(`Added "${book.title}" to cart!`, 'success');
-  };
+  const handleAddToCart = useCallback(
+    (book: Book) => {
+      addToast(`Added "${book.title}" to cart!`, 'success');
+    },
+    [addToast]
+  );
 
   return (
     <div className="space-y-8 pb-12">
